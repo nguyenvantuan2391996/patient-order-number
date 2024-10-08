@@ -5,8 +5,8 @@ import (
 	"runtime/debug"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nguyenvantuan2391996/patient-order-number/base_common/constants"
 	"github.com/sirupsen/logrus"
-	"patient-order-number/base_common/constants"
 )
 
 func Recover() gin.HandlerFunc {

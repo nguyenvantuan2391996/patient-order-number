@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"patient-order-number/base_common/constants"
+	"github.com/nguyenvantuan2391996/patient-order-number/base_common/constants"
 )
 
 const (
@@ -26,14 +26,14 @@ var (
 )
 
 type Response struct {
-	RequestID    string                  `json:"request_id"`
-	ErrorCode    int                     `json:"code"`
-	ErrorMessage string                  `json:"message"`
-	ServerTime   int64                   `json:"server_time"`
-	Count        int                     `json:"count,omitempty"`
 	Data         interface{}             `json:"data,omitempty"`
 	Agg          *map[string]interface{} `json:"agg,omitempty"`
 	Meta         *map[string]interface{} `json:"meta,omitempty"`
+	RequestID    string                  `json:"request_id"`
+	ErrorMessage string                  `json:"message"`
+	ErrorCode    int                     `json:"code"`
+	ServerTime   int64                   `json:"server_time"`
+	Count        int                     `json:"count,omitempty"`
 }
 
 func NewResponse(ctx context.Context) *Response {
