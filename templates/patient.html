@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh sách khám bệnh</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+<div class="container mx-auto p-6 w-full">
+  <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-8">DANH SÁCH KHÁM BỆNH</h1>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white rounded-lg shadow-lg overflow-hidden">
+      <thead>
+      <tr class="bg-gradient-to-r from-green-400 to-blue-500 text-white uppercase text-lg md:text-3xl leading-normal">
+        <th class="py-3 md:py-4 px-3 md:px-6 text-left">STT</th>
+        <th class="py-3 md:py-4 px-3 md:px-6 text-left">Tên</th>
+        <th class="py-3 md:py-4 px-3 md:px-6 text-left">Tuổi</th>
+        <th class="py-3 md:py-4 px-3 md:px-6 text-left">Giới tính</th>
+        <th class="py-3 md:py-4 px-3 md:px-6 text-left">Phòng</th>
+        <th class="py-3 md:py-4 px-3 md:px-6 text-left">Bác sĩ</th>
+        <th class="py-3 md:py-4 px-3 md:px-6 text-left">Trạng Thái</th>
+      </tr>
+      </thead>
+      <tbody class="text-gray-700 text-lg md:text-3xl font-light">
+      <tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-300">
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">1</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Nguyễn Văn An</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">45</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Nam</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">02</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">PGS. TS. Võ Hồng Khôi</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left font-bold">Đang Khám</td>
+      </tr>
+      <tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-300">
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">2</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Trần Văn An</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">50</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Nam</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">02</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">TS. BS. Trịnh Tiến Lực</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Đợi Khám</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div id="pagination" class="mt-4 flex justify-center">
+    <button class="mx-1 px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-400">1</button>
+    <button class="mx-1 px-3 py-1 rounded bg-gray-300 hover:bg-blue-400">2</button>
+    <button class="mx-1 px-3 py-1 rounded bg-gray-300 hover:bg-blue-400">3</button>
+  </div>
+
+</div>
+</body>
+</html>
