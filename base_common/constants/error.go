@@ -11,3 +11,7 @@ const (
 	FormatDeleteEntityErr = "delete %v is failed with err %v"
 	FormatTaskErr         = "task %v is failed with err %v"
 )
+
+const (
+	FormatBeginTask = "begin task %v with input %v"
+)

@@ -6,6 +6,9 @@ require (
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-contrib/gzip v1.0.1
 	github.com/gin-gonic/gin v1.9.1
+	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
+	github.com/google/uuid v1.4.0
+	github.com/gorilla/websocket v1.5.3
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
 	gorm.io/driver/mysql v1.5.7

@@ -74,12 +74,22 @@ func main() {
 	r.Use(gzip.Gzip(gzip.DefaultCompression))
 	r.Use(middlewares.Recover())
 
-	// public
-	v1API := r.Group("v1")
-	{
-		v1API.Use(middlewares.APIKeyAuthentication())
+	// Load HTML templates from the "templates" folder
+	r.LoadHTMLGlob("templates/*")
 
-		v1API.POST("/test", h.Test)
+	// APIs public
+	v1Public := r.Group("v1")
+	{
+		v1Public.GET("/patient-page", h.GetPatientPage)
+		v1Public.GET("/patient/:channel", h.InitWSPatient)
+	}
+
+	// Patient APIs
+	v1Patient := r.Group("v1/api")
+	{
+		v1Patient.Use(middlewares.APIKeyAuthentication())
+
+		v1Patient.POST("/patient", h.CreatePatient)
 	}
 
 	err = r.Run(":" + viper.GetString("PORT"))

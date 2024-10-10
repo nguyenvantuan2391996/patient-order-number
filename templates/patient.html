@@ -11,7 +11,7 @@
   <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-8">DANH SÁCH KHÁM BỆNH</h1>
 
   <div class="overflow-x-auto">
-    <table class="min-w-full bg-white rounded-lg shadow-lg overflow-hidden">
+    <table class="min-w-full bg-white rounded-lg shadow-lg overflow-hidden" id="table-patients">
       <thead>
       <tr class="bg-gradient-to-r from-green-400 to-blue-500 text-white uppercase text-lg md:text-3xl leading-normal">
         <th class="py-3 md:py-4 px-3 md:px-6 text-left">STT</th>
@@ -56,3 +56,51 @@
 </div>
 </body>
 </html>
+
+<script>
+  let ws;
+  if (window.WebSocket === undefined) {
+    console.log("Your browser does not support WebSockets")
+  } else {
+    ws = initWS();
+  }
+
+  function initWS() {
+    let socket = new WebSocket("ws://" + window.location.host + "/v1/patient/1")
+
+    socket.onopen = function() {
+      console.log("Socket is open")
+    };
+
+    // receive data from server
+    socket.onmessage = function (e) {
+      console.log(JSON.parse(e.data).data)
+      generate(JSON.parse(e.data).data)
+    }
+
+    // close socket
+    socket.onclose = function () {
+      console.log("Socket closed")
+    }
+
+    return socket;
+  }
+
+  function generate(patient) {
+    let tr_content = "";
+    tr_content += `<tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-300">
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${++document.querySelector("#table-patients>tbody").rows.length}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.name}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.age}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.sex}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.room_number}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.doctor_name}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.status}</td>
+      </tr>`
+
+
+    document.querySelector(
+            "#table-patients>tbody"
+    ).innerHTML += `<tbody class="bg-white">${tr_content}</tbody>`;
+  }
+</script>
