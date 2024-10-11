@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/nguyenvantuan2391996/patient-order-number/base_common/comoutput"
+	"github.com/nguyenvantuan2391996/patient-order-number/base_common/constants"
 	"github.com/nguyenvantuan2391996/patient-order-number/internal/domains/patient/models"
 	"github.com/nguyenvantuan2391996/patient-order-number/internal/domains/repository"
 	"github.com/sirupsen/logrus"
@@ -25,6 +26,7 @@ func NewPatientService(accountRepo repository.IAccountRepositoryInterface) *Pati
 }
 
 func (ps *Patient) InitWSPatient(channel string, conn *websocket.Conn) {
+	logrus.Info(fmt.Sprintf(constants.FormatBeginTask, "InitWSPatient", channel))
 	if _, ok := ps.mapWSConnection[channel]; ok {
 		err := ps.mapWSConnection[channel].Close()
 		if err != nil {
@@ -36,6 +38,8 @@ func (ps *Patient) InitWSPatient(channel string, conn *websocket.Conn) {
 }
 
 func (ps *Patient) CreatePatient(ctx context.Context, input *models.PatientInput) (*comoutput.BaseOutput, error) {
+	logrus.Info(fmt.Sprintf(constants.FormatBeginTask, "CreatePatient", input))
+
 	// insert database
 	// write message to socket
 	go func() {

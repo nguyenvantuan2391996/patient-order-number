@@ -24,33 +24,30 @@
       </tr>
       </thead>
       <tbody class="text-gray-700 text-lg md:text-3xl font-light">
-      <tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-300">
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">1</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Nguyễn Văn An</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">45</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Nam</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">02</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">PGS. TS. Võ Hồng Khôi</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left font-bold">Đang Khám</td>
-      </tr>
-      <tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-300">
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">2</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Trần Văn An</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">50</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Nam</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">02</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">TS. BS. Trịnh Tiến Lực</td>
-        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Đợi Khám</td>
-      </tr>
+<!--      <tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-300">-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">1</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Nguyễn Văn An</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">45</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Nam</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">02</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">PGS. TS. Võ Hồng Khôi</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left font-bold">Đang Khám</td>-->
+<!--      </tr>-->
+<!--      <tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-300">-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">2</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Trần Văn An</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">50</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Nam</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">02</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">TS. BS. Trịnh Tiến Lực</td>-->
+<!--        <td class="py-3 md:py-4 px-3 md:px-6 text-left">Đợi Khám</td>-->
+<!--      </tr>-->
       </tbody>
     </table>
   </div>
 
   <!-- Pagination -->
   <div id="pagination" class="mt-4 flex justify-center">
-    <button class="mx-1 px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-400">1</button>
-    <button class="mx-1 px-3 py-1 rounded bg-gray-300 hover:bg-blue-400">2</button>
-    <button class="mx-1 px-3 py-1 rounded bg-gray-300 hover:bg-blue-400">3</button>
   </div>
 
 </div>
@@ -75,7 +72,7 @@
     // receive data from server
     socket.onmessage = function (e) {
       console.log(JSON.parse(e.data).data)
-      generate(JSON.parse(e.data).data)
+      pushNewPatient(JSON.parse(e.data).data)
     }
 
     // close socket
@@ -86,9 +83,14 @@
     return socket;
   }
 
-  function generate(patient) {
-    let tr_content = "";
-    tr_content += `<tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-300">
+  function pushNewPatient(patient) {
+    let patients = JSON.parse(localStorage.getItem("patients"))
+    patients.push(patient)
+    localStorage.setItem("patients", JSON.stringify(patients))
+
+    if (patients.length < 10) {
+      let tr_content = "";
+      tr_content += `<tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-300">
         <td class="py-3 md:py-4 px-3 md:px-6 text-left">${++document.querySelector("#table-patients>tbody").rows.length}</td>
         <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.name}</td>
         <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.age}</td>
@@ -99,8 +101,62 @@
       </tr>`
 
 
-    document.querySelector(
-            "#table-patients>tbody"
-    ).innerHTML += `<tbody class="bg-white">${tr_content}</tbody>`;
+      document.querySelector(
+              "#table-patients>tbody"
+      ).innerHTML += `<tbody class="bg-white">${tr_content}</tbody>`;
+    }
+
+    genPagination(patients)
   }
+
+  function generate(patients) {
+    document.querySelector("#table-patients>tbody").innerHTML = ""
+    let tr_content = "";
+    for (const patient of patients) {
+      tr_content += `<tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-300">
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${++document.querySelector("#table-patients>tbody").rows.length}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.name}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.age}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.sex}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.room_number}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.doctor_name}</td>
+        <td class="py-3 md:py-4 px-3 md:px-6 text-left">${patient.status}</td>
+      </tr>`
+
+
+      document.querySelector(
+              "#table-patients>tbody"
+      ).innerHTML = `<tbody class="bg-white">${tr_content}</tbody>`;
+    }
+
+    genPagination(JSON.parse(localStorage.getItem("patients")))
+  }
+
+  let currentPage = 1;
+  function genPagination(patients) {
+    const totalPages = Math.ceil(patients.length / 10);
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = "";
+
+    for (let i = 1; i <= totalPages; i++) {
+      const pageButton = document.createElement('button');
+      pageButton.innerText = i.toString();
+      pageButton.className = `mx-1 px-3 py-1 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'} hover:bg-blue-400`;
+      pageButton.onclick = () => {
+        currentPage = i
+        const startIndex = (currentPage - 1) * 10;
+        const endIndex = startIndex + 10;
+        const paginatedPatients = patients.slice(startIndex, endIndex);
+        generate(paginatedPatients)
+      };
+      pagination.appendChild(pageButton);
+    }
+  }
+
+  window.addEventListener("load", async (event) => {
+    // call api get patients today
+    let patients = []
+    localStorage.setItem("patients", JSON.stringify(patients))
+    genPagination(patients)
+  })
 </script>

@@ -9,7 +9,6 @@ import (
 	"github.com/nguyenvantuan2391996/patient-order-number/handler/middlewares"
 	"github.com/nguyenvantuan2391996/patient-order-number/internal/domains/patient"
 	"github.com/nguyenvantuan2391996/patient-order-number/internal/infrastructure/repository"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -48,14 +47,14 @@ func main() {
 		return
 	}
 
-	db, err := initDatabase()
-	if err != nil {
-		logrus.Fatal("failed to open database:", err)
-		return
-	}
+	//db, err := initDatabase()
+	//if err != nil {
+	//	logrus.Fatal("failed to open database:", err)
+	//	return
+	//}
 
 	// repository
-	accountRepo := repository.NewAccountRepository(db)
+	accountRepo := repository.NewAccountRepository(nil)
 
 	// service
 	patientService := patient.NewPatientService(accountRepo)

@@ -26,8 +26,6 @@ func (h *Handler) GetPatientPage(ctx *gin.Context) {
 }
 
 func (h *Handler) InitWSPatient(ctx *gin.Context) {
-	logrus.Info(fmt.Sprintf(constants.FormatBeginTask, "InitWSPatient", ""))
-
 	responseAPI := response.NewResponse(ctx)
 
 	protocol := "http://"
@@ -54,7 +52,6 @@ func (h *Handler) InitWSPatient(ctx *gin.Context) {
 }
 
 func (h *Handler) CreatePatient(ctx *gin.Context) {
-	logrus.Info(fmt.Sprintf(constants.FormatBeginTask, "CreatePatient", ""))
 	request := models.PatientRequest{}
 	responseAPI := response.NewResponse(ctx)
 
