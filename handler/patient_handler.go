@@ -25,6 +25,22 @@ func (h *Handler) GetPatientPage(ctx *gin.Context) {
 	})
 }
 
+func (h *Handler) LoginPatientPage(ctx *gin.Context) {
+	logrus.Info(fmt.Sprintf(constants.FormatBeginTask, "LoginPatientPage", ""))
+
+	ctx.HTML(200, "admin-login.html", gin.H{
+		"title": "Login Patient",
+	})
+}
+
+func (h *Handler) GetAdminPatientPage(ctx *gin.Context) {
+	logrus.Info(fmt.Sprintf(constants.FormatBeginTask, "GetAdminPatientPage", ""))
+
+	ctx.HTML(200, "admin-patient.html", gin.H{
+		"title": "Admin Patient",
+	})
+}
+
 func (h *Handler) InitWSPatient(ctx *gin.Context) {
 	responseAPI := response.NewResponse(ctx)
 

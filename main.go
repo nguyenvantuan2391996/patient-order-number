@@ -80,6 +80,8 @@ func main() {
 	v1Public := r.Group("v1")
 	{
 		v1Public.GET("/patient-page", h.GetPatientPage)
+		v1Public.GET("/patient/login", h.LoginPatientPage)
+		v1Public.GET("/patient/admin", h.GetAdminPatientPage)
 		v1Public.GET("/patient/:channel", h.InitWSPatient)
 	}
 
