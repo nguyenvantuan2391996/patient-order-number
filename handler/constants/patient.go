@@ -8,4 +8,5 @@ const (
 const (
 	WaitingStatus = "Đợi Khám"
 	DoingStatus   = "Đang Khám"
+	DoneStatus    = "Khám Xong"
 )

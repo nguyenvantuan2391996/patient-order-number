@@ -20,7 +20,7 @@ type PatientRequest struct {
 func (r *PatientRequest) Validate() error {
 	return validation.ValidateStruct(r,
 		validation.Field(&r.Sex, validation.In(constants.Male, constants.Female)),
-		validation.Field(&r.Status, validation.In(constants.WaitingStatus, constants.DoingStatus)),
+		validation.Field(&r.Status, validation.In(constants.WaitingStatus, constants.DoingStatus, constants.DoneStatus)),
 	)
 }
 

@@ -40,7 +40,7 @@
   <div id="viewPatientListScreen" class="screen">
     <h2 class="text-3xl font-bold text-gray-700 mb-4">Danh Sách Khám Bệnh</h2>
     <div class="flex items-center mb-4">
-      <label class="block text-sm font-medium text-gray-700 mr-2">Chọn Ngày:</label>
+<!--      <label class="block text-sm font-medium text-gray-700 mr-2">Chọn Ngày:</label>-->
       <input type="date" id="appointmentDate" class="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
     <ul id="patientList" class="space-y-3">
@@ -62,20 +62,27 @@
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700">Giới Tính</label>
-        <select class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option id="male" selected>Nam</option>
-          <option id="female">Nữ</option>
-          <option id="other">Khác</option>
-        </select>
+        <label>
+          <select id="sex" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="male" selected>Nam</option>
+            <option value="female">Nữ</option>
+            <option value="other">Khác</option>
+          </select>
+        </label>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700">Phòng</label>
-        <input type="text" id="patientCondition1" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input type="text" id="room_number" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700">Bác Sĩ</label>
-        <input type="text" id="patientCondition2" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input type="text" id="doctor_name" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
+      <select id="status" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="Đợi Khám" selected>Đợi Khám</option>
+        <option value="Đang Khám">Đang Khám</option>
+        <option value="Khám Xong">Khám Xong</option>
+      </select>
       <button type="submit" id="submitBtn" class="w-full bg-blue-500 text-white p-3 rounded-lg shadow-md hover:bg-blue-600 transition-all duration-200">
         <span id="submitText">Lưu</span>
         <span id="loadingSpinner" class="hidden loading inline-block w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin ml-2"></span>
