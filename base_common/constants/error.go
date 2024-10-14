@@ -1,7 +1,13 @@
 package constants
 
+import "fmt"
+
 const (
-	SomethingWentWrong = "Something went wrong"
+	SomethingWentWrong          = "Something went wrong"
+	ErrAuthorizationHeaderEmpty = "authorization header is empty"
+	ErrInvalidAuthorizationType = "invalid authorization type"
+	ErrInvalidToken             = "invalid token"
+	ErrNotAuthorized            = "not authorized"
 )
 
 const (
@@ -14,4 +20,9 @@ const (
 
 const (
 	FormatBeginTask = "begin task %v with input %v"
+	FormatBeginAPI  = "begin api %v..."
+)
+
+var (
+	AccountInvalid = fmt.Errorf("account is invalid")
 )

@@ -5,10 +5,13 @@ import (
 	"os"
 	"time"
 
+	"github.com/nguyenvantuan2391996/patient-order-number/base_common/constants"
 	"github.com/nguyenvantuan2391996/patient-order-number/handler"
 	"github.com/nguyenvantuan2391996/patient-order-number/handler/middlewares"
+	"github.com/nguyenvantuan2391996/patient-order-number/internal/domains/auth"
 	"github.com/nguyenvantuan2391996/patient-order-number/internal/domains/patient"
 	"github.com/nguyenvantuan2391996/patient-order-number/internal/infrastructure/repository"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -47,19 +50,21 @@ func main() {
 		return
 	}
 
-	//db, err := initDatabase()
-	//if err != nil {
-	//	logrus.Fatal("failed to open database:", err)
-	//	return
-	//}
+	db, err := initDatabase()
+	if err != nil {
+		logrus.Fatal("failed to open database:", err)
+		return
+	}
 
 	// repository
-	accountRepo := repository.NewAccountRepository(nil)
+	accountRepo := repository.NewAccountRepository(db)
+	patientRepo := repository.NewPatientRepository(db)
 
 	// service
-	patientService := patient.NewPatientService(accountRepo)
+	patientService := patient.NewPatientService(accountRepo, patientRepo)
+	authService := auth.NewAuthService(accountRepo)
 
-	h := handler.NewHandler(patientService)
+	h := handler.NewHandler(patientService, authService)
 
 	r := gin.New()
 	r.Use(cors.New(cors.Config{
@@ -88,7 +93,7 @@ func main() {
 	// Patient APIs
 	v1Patient := r.Group("v1/api")
 	{
-		v1Patient.Use(middlewares.APIKeyAuthentication())
+		v1Patient.Use(middlewares.JWTValidationMW(constants.RoleAdmin))
 
 		v1Patient.POST("/patient", h.CreatePatient)
 	}

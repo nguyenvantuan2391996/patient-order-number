@@ -18,7 +18,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func (h *Handler) GetPatientPage(ctx *gin.Context) {
-	logrus.Info(fmt.Sprintf(constants.FormatBeginTask, "GetPatientPage", ""))
+	logrus.Info(fmt.Sprintf(constants.FormatBeginAPI, "GetPatientPage"))
 
 	ctx.HTML(200, "patient.html", gin.H{
 		"title": "Patient List",
@@ -26,7 +26,7 @@ func (h *Handler) GetPatientPage(ctx *gin.Context) {
 }
 
 func (h *Handler) LoginPatientPage(ctx *gin.Context) {
-	logrus.Info(fmt.Sprintf(constants.FormatBeginTask, "LoginPatientPage", ""))
+	logrus.Info(fmt.Sprintf(constants.FormatBeginAPI, "LoginPatientPage"))
 
 	ctx.HTML(200, "admin-login.html", gin.H{
 		"title": "Login Patient",
@@ -34,7 +34,7 @@ func (h *Handler) LoginPatientPage(ctx *gin.Context) {
 }
 
 func (h *Handler) GetAdminPatientPage(ctx *gin.Context) {
-	logrus.Info(fmt.Sprintf(constants.FormatBeginTask, "GetAdminPatientPage", ""))
+	logrus.Info(fmt.Sprintf(constants.FormatBeginAPI, "GetAdminPatientPage"))
 
 	ctx.HTML(200, "admin-patient.html", gin.H{
 		"title": "Admin Patient",
@@ -42,6 +42,7 @@ func (h *Handler) GetAdminPatientPage(ctx *gin.Context) {
 }
 
 func (h *Handler) InitWSPatient(ctx *gin.Context) {
+	logrus.Info(fmt.Sprintf(constants.FormatBeginAPI, "InitWSPatient"))
 	responseAPI := response.NewResponse(ctx)
 
 	protocol := "http://"
@@ -68,6 +69,7 @@ func (h *Handler) InitWSPatient(ctx *gin.Context) {
 }
 
 func (h *Handler) CreatePatient(ctx *gin.Context) {
+	logrus.Info(fmt.Sprintf(constants.FormatBeginAPI, "CreatePatient"))
 	request := models.PatientRequest{}
 	responseAPI := response.NewResponse(ctx)
 
