@@ -8,6 +8,7 @@ import (
 	"github.com/nguyenvantuan2391996/patient-order-number/base_common/constants"
 	"github.com/nguyenvantuan2391996/patient-order-number/handler"
 	"github.com/nguyenvantuan2391996/patient-order-number/handler/middlewares"
+	"github.com/nguyenvantuan2391996/patient-order-number/internal/domains/admin"
 	"github.com/nguyenvantuan2391996/patient-order-number/internal/domains/auth"
 	"github.com/nguyenvantuan2391996/patient-order-number/internal/domains/patient"
 	"github.com/nguyenvantuan2391996/patient-order-number/internal/infrastructure/repository"
@@ -62,9 +63,10 @@ func main() {
 
 	// service
 	patientService := patient.NewPatientService(accountRepo, patientRepo)
+	adminService := admin.NewAdminService(accountRepo)
 	authService := auth.NewAuthService(accountRepo)
 
-	h := handler.NewHandler(patientService, authService)
+	h := handler.NewHandler(patientService, adminService, authService)
 
 	r := gin.New()
 	r.Use(cors.New(cors.Config{
@@ -81,7 +83,18 @@ func main() {
 	// Load HTML templates from the "templates" folder
 	r.LoadHTMLGlob("templates/*")
 
-	// APIs public
+	// Admis APIs
+	adminAPI := r.Group("v1/api")
+	{
+		// auth
+		adminAPI.Use(middlewares.JWTValidationMW(constants.RoleAdmin))
+
+		adminAPI.POST("/accounts", h.CreateAccount)
+		adminAPI.PUT("/accounts/:user_id", h.UpdateAccount)
+		adminAPI.DELETE("/accounts/:user_id", h.DeleteAccount)
+	}
+
+	// Public APIs
 	v1Public := r.Group("v1")
 	{
 		v1Public.GET("/patient-page", h.GetPatientPage)

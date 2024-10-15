@@ -15,6 +15,10 @@ func NewAccountRepository(db *gorm.DB) *AccountRepository {
 	return &AccountRepository{db: db}
 }
 
+func (ar *AccountRepository) Create(ctx context.Context, record *entities.Account) error {
+	return ar.db.WithContext(ctx).Create(&record).Error
+}
+
 func (ar *AccountRepository) GetByQueries(ctx context.Context, queries map[string]interface{}) (*entities.Account, error) {
 	var record *entities.Account
 	err := ar.db.WithContext(ctx).Where(queries).First(&record).Error
@@ -23,5 +27,12 @@ func (ar *AccountRepository) GetByQueries(ctx context.Context, queries map[strin
 	}
 
 	return record, nil
+}
 
+func (ar *AccountRepository) UpdateWithMap(ctx context.Context, record *entities.Account, params map[string]interface{}) error {
+	return ar.db.WithContext(ctx).Model(record).Updates(params).Error
+}
+
+func (ar *AccountRepository) Delete(ctx context.Context, record *entities.Account) error {
+	return ar.db.WithContext(ctx).Delete(record).Error
 }

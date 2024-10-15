@@ -24,5 +24,7 @@ const (
 )
 
 var (
-	AccountInvalid = fmt.Errorf("account is invalid")
+	AccountInvalid    = fmt.Errorf("account is invalid")
+	AccountExisted    = fmt.Errorf("account is existed")
+	AccountNotExisted = fmt.Errorf("account is not existed")
 )
