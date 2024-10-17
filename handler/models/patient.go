@@ -17,10 +17,22 @@ type PatientRequest struct {
 	Age         int    `form:"age"`
 }
 
+type PatientSearchRequest struct {
+	StartDate string `form:"start_date"`
+	Limit     int    `form:"limit"`
+	Page      int    `form:"page"`
+}
+
 func (r *PatientRequest) Validate() error {
 	return validation.ValidateStruct(r,
 		validation.Field(&r.Sex, validation.In(constants.Male, constants.Female)),
 		validation.Field(&r.Status, validation.In(constants.WaitingStatus, constants.DoingStatus, constants.DoneStatus)),
+	)
+}
+
+func (r *PatientSearchRequest) Validate() error {
+	return validation.ValidateStruct(r,
+		validation.Field(&r.StartDate, validation.Required),
 	)
 }
 
@@ -38,6 +50,27 @@ func (r *PatientRequest) ToPatientInput() *models.PatientInput {
 	out.Status = r.Status
 	out.OrderNumber = r.OrderNumber
 	out.Age = r.Age
+
+	return out
+}
+
+func (r *PatientSearchRequest) ToPatientSearchInput() *models.PatientSearchInput {
+	out := &models.PatientSearchInput{}
+	if r == nil {
+		return out
+	}
+
+	out.StartDate = r.StartDate
+	if r.Limit <= 0 {
+		r.Limit = 10
+	}
+
+	if r.Page <= 0 {
+		r.Page = 1
+	}
+
+	out.Limit = r.Limit
+	out.Offset = (r.Page - 1) * r.Limit
 
 	return out
 }

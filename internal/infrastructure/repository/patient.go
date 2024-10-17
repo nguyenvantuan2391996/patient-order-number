@@ -30,7 +30,7 @@ func (pr *PatientRepository) GetByQueries(ctx context.Context,
 	return record, nil
 }
 
-func (pr *PatientRepository) List(ctx context.Context, queries map[string]interface{}, page, limit int,
+func (pr *PatientRepository) List(ctx context.Context, queries map[string]interface{}, limit, offset int,
 	conditions ...string) ([]*entities.Patient, error) {
 	records := make([]*entities.Patient, 0)
 
@@ -43,7 +43,7 @@ func (pr *PatientRepository) List(ctx context.Context, queries map[string]interf
 		query = query.Where(cond)
 	}
 
-	query.Offset((page - 1) * limit).Limit(limit)
+	query.Limit(limit).Offset(offset)
 	err := query.Find(&records).Error
 	if err != nil {
 		return nil, err

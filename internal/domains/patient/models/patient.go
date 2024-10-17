@@ -10,3 +10,9 @@ type PatientInput struct {
 	OrderNumber int    `json:"order_number"`
 	Age         int    `json:"age"`
 }
+
+type PatientSearchInput struct {
+	StartDate string
+	Limit     int
+	Offset    int
+}

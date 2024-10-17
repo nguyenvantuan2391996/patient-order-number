@@ -109,6 +109,9 @@ func main() {
 		v1Patient.Use(middlewares.JWTValidationMW(constants.RoleAdmin))
 
 		v1Patient.POST("/patient", h.CreatePatient)
+		v1Patient.GET("/patient/list", h.GetListPatient)
+		v1Patient.PUT("/patient/:id", h.UpdatePatient)
+		v1Patient.DELETE("/patient/:id", h.DeletePatient)
 	}
 
 	err = r.Run(":" + viper.GetString("PORT"))

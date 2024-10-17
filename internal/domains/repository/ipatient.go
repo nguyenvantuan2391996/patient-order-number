@@ -11,7 +11,7 @@ import (
 type IPatientRepositoryInterface interface {
 	Create(ctx context.Context, record *entities.Patient) error
 	GetByQueries(ctx context.Context, queries map[string]interface{}) (*entities.Patient, error)
-	List(ctx context.Context, queries map[string]interface{}, page, limit int,
+	List(ctx context.Context, queries map[string]interface{}, limit, offset int,
 		conditions ...string) ([]*entities.Patient, error)
 	Total(ctx context.Context, queries map[string]interface{}, conditions ...string) (int64, error)
 	UpdateWithMap(ctx context.Context, record *entities.Patient, params map[string]interface{}) error
