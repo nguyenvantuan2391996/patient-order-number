@@ -83,7 +83,18 @@ func main() {
 	// Load HTML templates from the "templates" folder
 	r.LoadHTMLGlob("templates/*")
 
-	// Admis APIs
+	// Public APIs
+	v1Public := r.Group("v1")
+	{
+		v1Public.POST("/login", h.Login)
+
+		v1Public.GET("/patient-page", h.GetPatientPage)
+		v1Public.GET("/patient/login", h.LoginPatientPage)
+		v1Public.GET("/patient/admin", h.GetAdminPatientPage)
+		v1Public.GET("/patient/:channel", h.InitWSPatient)
+	}
+
+	// Admin APIs
 	adminAPI := r.Group("v1/api")
 	{
 		// auth
@@ -92,15 +103,6 @@ func main() {
 		adminAPI.POST("/accounts", h.CreateAccount)
 		adminAPI.PUT("/accounts/:user_id", h.UpdateAccount)
 		adminAPI.DELETE("/accounts/:user_id", h.DeleteAccount)
-	}
-
-	// Public APIs
-	v1Public := r.Group("v1")
-	{
-		v1Public.GET("/patient-page", h.GetPatientPage)
-		v1Public.GET("/patient/login", h.LoginPatientPage)
-		v1Public.GET("/patient/admin", h.GetAdminPatientPage)
-		v1Public.GET("/patient/:channel", h.InitWSPatient)
 	}
 
 	// Patient APIs

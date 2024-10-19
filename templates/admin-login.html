@@ -5,30 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mobile Login</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .toast {
+      position: fixed;
+      top: 20px; /* Move to the top */
+      right: 20px; /* Keep on the right */
+      background-color: #e53e3e; /* Red color */
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
 <!-- Main container -->
 <div class="w-full max-w-sm bg-white rounded-lg shadow-md p-6">
 
-  <!-- App logo -->
-  <div class="flex justify-center mb-6">
-    <img src="https://via.placeholder.com/80" alt="App Logo" class="w-20 h-20 rounded-full">
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    Login Failed!
   </div>
+
+  <!-- App logo -->
+<!--  <div class="flex justify-center mb-6">-->
+<!--    <img src="https://via.placeholder.com/80" alt="App Logo" class="w-20 h-20 rounded-full">-->
+<!--  </div>-->
 
   <!-- Login Form -->
   <h2 class="text-2xl font-semibold text-center mb-6">Login</h2>
   <form>
     <!-- Email Field -->
     <div class="mb-4">
-      <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-      <input type="email" id="email" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your email">
+      <label for="user_name" class="block text-sm font-medium text-gray-700 mb-1">User Name</label>
+      <input type="text" id="user_name" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2
+      focus:ring-blue-500 focus:border-transparent" placeholder="Enter your user name">
     </div>
 
     <!-- Password Field -->
     <div class="mb-6">
       <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-      <input type="password" id="password" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your password">
+      <input type="password" id="password" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2
+       focus:ring-blue-500 focus:border-transparent" placeholder="Enter your password">
     </div>
 
     <!-- Remember Me Checkbox -->
@@ -41,7 +65,8 @@
     </div>
 
     <!-- Login Button -->
-    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md font-semibold hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300">
+    <button type="button" id="loginBtn" class="w-full bg-blue-500 text-white py-2 rounded-md font-semibold
+    hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300">
       Sign In
     </button>
   </form>
@@ -54,10 +79,12 @@
   </div>
 
   <!-- Social Login -->
-  <button class="w-full bg-red-500 text-white py-2 rounded-md font-semibold hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 mb-4">
+  <button class="w-full bg-red-500 text-white py-2 rounded-md font-semibold hover:bg-red-600 focus:outline-none
+   focus:ring-4 focus:ring-red-300 mb-4">
     Sign in with Google
   </button>
-  <button class="w-full bg-blue-700 text-white py-2 rounded-md font-semibold hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300">
+  <button class="w-full bg-blue-700 text-white py-2 rounded-md font-semibold hover:bg-blue-800 focus:outline-none
+   focus:ring-4 focus:ring-blue-300">
     Sign in with Facebook
   </button>
 
@@ -71,3 +98,53 @@
 
 </body>
 </html>
+
+<script>
+  const toast = document.getElementById('toast');
+  const loginBtn = document.getElementById('loginBtn');
+
+  loginBtn.addEventListener('click', async () => {
+    await login()
+  });
+
+  async function login() {
+    const form_data = new FormData();
+    form_data.append("user_name", document.getElementById("user_name").value);
+    form_data.append("password", document.getElementById("password").value);
+
+    const requestOptions = {
+      method: "POST",
+      body: form_data,
+      redirect: "follow"
+    };
+
+    await fetch(window.location.protocol + "//" + window.location.host + "/v1/login", requestOptions)
+            .then((response) => {
+              if (response.status === 500) {
+                showToast()
+                return
+              }
+
+              return response.json()
+            })
+            .then((result) => {
+              console.log(result)
+              localStorage.setItem("user_name", result.data.user_name)
+              localStorage.setItem("token", result.data.token)
+              localStorage.setItem("expire", result.data.expire)
+              window.location.href = "./admin";
+            })
+            .catch((error) => {
+              console.error(error)
+              showToast()
+            });
+  }
+
+  // Show toast notification
+  const showToast = () => {
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000); // Show for 3 seconds
+  };
+</script>

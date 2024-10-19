@@ -33,7 +33,8 @@ func (h *Handler) CreateAccount(ctx *gin.Context) {
 	result, err := h.adminService.CreateAccount(ctx, request.ToAccountInput())
 	if err != nil {
 		logrus.Errorf(constants.FormatTaskErr, "CreateAccount", err)
-		ctx.JSON(http.StatusInternalServerError, responseAPI.ToResponse(constants.InternalServerError, nil, constants.ResponseMessage[constants.InternalServerError]))
+		ctx.JSON(http.StatusInternalServerError, responseAPI.ToResponse(constants.InternalServerError,
+			nil, constants.ResponseMessage[constants.InternalServerError]))
 		return
 	}
 
@@ -66,7 +67,8 @@ func (h *Handler) UpdateAccount(ctx *gin.Context) {
 	result, err := h.adminService.UpdateAccount(ctx, request.ToAccountUpdateInput(int64(userID)))
 	if err != nil {
 		logrus.Errorf(constants.FormatTaskErr, "UpdateAccount", err)
-		ctx.JSON(http.StatusInternalServerError, responseAPI.ToResponse(constants.InternalServerError, nil, constants.ResponseMessage[constants.InternalServerError]))
+		ctx.JSON(http.StatusInternalServerError, responseAPI.ToResponse(constants.InternalServerError,
+			nil, constants.ResponseMessage[constants.InternalServerError]))
 		return
 	}
 
@@ -93,7 +95,8 @@ func (h *Handler) DeleteAccount(ctx *gin.Context) {
 	result, err := h.adminService.DeleteAccount(ctx, request.ToDeleteAccountInput(int64(userID)))
 	if err != nil {
 		logrus.Errorf(constants.FormatTaskErr, "DeleteAccount", err)
-		ctx.JSON(http.StatusInternalServerError, responseAPI.ToResponse(constants.InternalServerError, nil, constants.ResponseMessage[constants.InternalServerError]))
+		ctx.JSON(http.StatusInternalServerError, responseAPI.ToResponse(constants.InternalServerError,
+			nil, constants.ResponseMessage[constants.InternalServerError]))
 		return
 	}
 

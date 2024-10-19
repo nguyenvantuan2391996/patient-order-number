@@ -45,7 +45,7 @@ func (as *Admin) CreateAccount(ctx context.Context, input *models.AccountInput) 
 		UserName: input.UserName,
 		Password: input.Password,
 		Status:   1,
-		Role:     0,
+		Role:     constants.RoleAdmin,
 	})
 	if err != nil {
 		logrus.Errorf(constants.FormatCreateEntityErr, "accounts", err)
