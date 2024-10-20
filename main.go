@@ -92,6 +92,7 @@ func main() {
 		v1Public.GET("/patient/login", h.LoginPatientPage)
 		v1Public.GET("/patient/admin", h.GetAdminPatientPage)
 		v1Public.GET("/patient/:channel", h.InitWSPatient)
+		v1Public.GET("/patient/list", h.GetListPatient)
 	}
 
 	// Admin APIs
@@ -111,7 +112,6 @@ func main() {
 		v1Patient.Use(middlewares.JWTValidationMW(constants.RoleAdmin))
 
 		v1Patient.POST("/patient", h.CreatePatient)
-		v1Patient.GET("/patient/list", h.GetListPatient)
 		v1Patient.PUT("/patient/:id", h.UpdatePatient)
 		v1Patient.DELETE("/patient/:id", h.DeletePatient)
 	}

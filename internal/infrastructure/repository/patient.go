@@ -43,6 +43,7 @@ func (pr *PatientRepository) List(ctx context.Context, queries map[string]interf
 		query = query.Where(cond)
 	}
 
+	query.Order("id DESC")
 	query.Limit(limit).Offset(offset)
 	err := query.Find(&records).Error
 	if err != nil {

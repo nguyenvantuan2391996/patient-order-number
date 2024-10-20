@@ -128,7 +128,6 @@
               return response.json()
             })
             .then((result) => {
-              console.log(result)
               localStorage.setItem("user_name", result.data.user_name)
               localStorage.setItem("token", result.data.token)
               localStorage.setItem("expire", result.data.expire)
@@ -145,6 +144,6 @@
     toast.classList.add('show');
     setTimeout(() => {
       toast.classList.remove('show');
-    }, 3000); // Show for 3 seconds
+    }, 3000);
   };
 </script>

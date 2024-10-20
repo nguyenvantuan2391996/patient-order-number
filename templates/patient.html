@@ -135,9 +135,42 @@
     }
   }
 
+  async function getPatients(start_date, limit, page) {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    };
+
+    await fetch(window.location.protocol + "//" + window.location.host + "/v1/patient/list?start_date=" +
+            start_date + "&limit=" + limit + "&page=" + page, requestOptions)
+            .then((response) => {
+              if (response.status === 500) {
+                return
+              }
+
+              return response.json()
+            })
+            .then((result) => {
+              return result.data.records
+            })
+            .catch((error) => console.error(error));
+
+    return []
+  }
+
+  function getToday() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+
+    const formattedDate = `${yyyy}-${mm}-${dd}`;
+    return formattedDate
+  }
+
   window.addEventListener("load", async (event) => {
     // call api get patients today
-    let patients = []
+    let patients = await getPatients(getToday(), 10, 1)
     localStorage.setItem("patients", JSON.stringify(patients))
     genPagination(patients)
   })

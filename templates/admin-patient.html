@@ -41,7 +41,7 @@
     <h2 class="text-3xl font-bold text-gray-700 mb-4">Danh Sách Khám Bệnh</h2>
     <div class="flex items-center mb-4">
 <!--      <label class="block text-sm font-medium text-gray-700 mr-2">Chọn Ngày:</label>-->
-      <input type="date" id="appointmentDate" class="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <label for="appointmentDate"></label><input type="date" id="appointmentDate" class="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
     <ul id="patientList" class="space-y-3">
       <!-- Patient items will be dynamically added here -->
@@ -54,31 +54,31 @@
     <form id="addPatientForm" class="space-y-6">
       <div>
         <label class="block text-sm font-medium text-gray-700">Tên</label>
-        <input type="text" id="patientName" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <label for="patientName"></label><input type="text" id="patientName" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700">Tuổi</label>
-        <input type="number" id="patientAge" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <label for="patientAge"></label><input type="number" id="patientAge" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700">Giới Tính</label>
         <label>
           <select id="sex" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="male" selected>Nam</option>
-            <option value="female">Nữ</option>
-            <option value="other">Khác</option>
+            <option value="Nam" selected>Nam</option>
+            <option value="Nữ">Nữ</option>
+            <option value="Khác">Khác</option>
           </select>
         </label>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700">Phòng</label>
-        <input type="text" id="room_number" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <label for="room_number"></label><input type="text" id="room_number" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700">Bác Sĩ</label>
-        <input type="text" id="doctor_name" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <label for="doctor_name"></label><input type="text" id="doctor_name" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
-      <select id="status" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <label for="status"></label><select id="status" class="w-full mt-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="Đợi Khám" selected>Đợi Khám</option>
         <option value="Đang Khám">Đang Khám</option>
         <option value="Khám Xong">Khám Xong</option>
@@ -134,7 +134,7 @@
   });
 
   // Patient data
-  const patients = [];
+  let patients = [];
 
   // Add new patient
   const addPatientForm = document.getElementById('addPatientForm');
@@ -147,18 +147,13 @@
     e.preventDefault();
 
     const name = document.getElementById('patientName').value;
-    const age = document.getElementById('patientAge').value;
-    const condition = document.getElementById('patientCondition1').value;
 
-    if (name && age && condition) {
+    if (name) {
       // Show loading spinner
       submitText.classList.add('hidden');
       loadingSpinner.classList.remove('hidden');
 
       await createPatient()
-
-      const newPatient = {name, age, condition};
-      patients.push(newPatient);
 
       // patient list
       displayPatients();
@@ -185,7 +180,7 @@
       const template = document.getElementById('patientTemplate').content.cloneNode(true);
       template.querySelector('#patientNameTemplate').textContent = patient.name;
       template.querySelector('#patientAgeTemplate').textContent = `Age: ${patient.age}`;
-      template.querySelector('#patientConditionTemplate').textContent = `Condition: ${patient.condition}`;
+      template.querySelector('#patientConditionTemplate').textContent = `Phòng: ${patient.room_number}`;
 
       const deleteBtn = template.querySelector('.delete-btn');
       deleteBtn.addEventListener('click', () => {
@@ -197,7 +192,7 @@
       editBtn.addEventListener('click', () => {
         document.getElementById('patientName').value = patient.name;
         document.getElementById('patientAge').value = patient.age;
-        document.getElementById('patientCondition').value = patient.condition;
+        document.getElementById('patientCondition').value = patient.room_number;
         patients.splice(index, 1);
         createScreen.classList.remove('hidden');
         listScreen.classList.add('hidden');
@@ -209,30 +204,82 @@
 
   async function createPatient() {
     const myHeaders = new Headers();
-    myHeaders.append("api-key", "c3kvxLTTVaAF5aQU2BHRBnaI7kFvVzt3aJSZfUav6RzmKM6cBN");
+    myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
-    const formdata = new FormData();
-    formdata.append("channel", "1");
-    formdata.append("name", "2");
-    formdata.append("sex", "Nam");
-    formdata.append("room_number", "01");
-    formdata.append("doctor_name", "hihi");
-    formdata.append("status", "Đợi Khám");
-    formdata.append("order_number", "12");
-    formdata.append("age", "80");
+    const formData = new FormData();
+    formData.append("channel", "1");
+    formData.append("name", document.getElementById("patientName").value);
+    formData.append("sex", document.getElementById("sex").value);
+    formData.append("room_number", document.getElementById("room_number").value);
+    formData.append("doctor_name", document.getElementById("doctor_name").value);
+    formData.append("status", document.getElementById("status").value);
+    formData.append("age", document.getElementById("patientAge").value);
 
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
-      body: formdata,
+      body: formData,
       redirect: "follow"
     };
 
     await fetch(window.location.protocol + "//" + window.location.host + "/v1/api/patient", requestOptions)
-            .then((response) => response.json())
-            .then((result) => console.log(result))
+            .then((response) => {
+              if (response.status === 401) {
+                window.location.href = "./login";
+                return
+              }
+
+              if (response.status === 500) {
+                showToast()
+                return
+              }
+
+              return response.json()
+            })
+            .then((result) => {
+              patients.push(result.data);
+            })
             .catch((error) => console.error(error));
   }
+
+  async function getPatients(start_date, limit, page) {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    };
+
+    await fetch(window.location.protocol + "//" + window.location.host + "/v1/patient/list?start_date=" +
+            start_date + "&limit=" + limit + "&page=" + page, requestOptions)
+            .then((response) => {
+              if (response.status === 500) {
+                return
+              }
+
+              return response.json()
+            })
+            .then((result) => {
+              patients = patients.concat(result.data.records)
+            })
+            .catch((error) => console.error(error));
+
+    return []
+  }
+
+  function getToday() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+
+    return `${yyyy}-${mm}-${dd}`
+  }
+
+  window.addEventListener("load", async (event) => {
+    // call api get patients today
+    document.getElementById("appointmentDate").value = getToday();
+    await getPatients(getToday(), 500, 1)
+    displayPatients()
+  })
 
   // Show toast notification
   const showToast = () => {

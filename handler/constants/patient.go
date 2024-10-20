@@ -3,6 +3,7 @@ package constants
 const (
 	Male   = "Nam"
 	Female = "Nữ"
+	Other  = "Khác"
 )
 
 const (
