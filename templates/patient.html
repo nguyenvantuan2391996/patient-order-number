@@ -111,7 +111,7 @@
       ).innerHTML = `<tbody class="bg-white">${tr_content}</tbody>`;
     }
 
-    genPagination(JSON.parse(localStorage.getItem("patients")))
+    // genPagination(JSON.parse(localStorage.getItem("patients")))
   }
 
   let currentPage = 1;
@@ -120,22 +120,25 @@
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = "";
 
-    for (let i = 1; i <= totalPages; i++) {
-      const pageButton = document.createElement('button');
-      pageButton.innerText = i.toString();
-      pageButton.className = `mx-1 px-3 py-1 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'} hover:bg-blue-400`;
-      pageButton.onclick = () => {
-        currentPage = i
-        const startIndex = (currentPage - 1) * 10;
-        const endIndex = startIndex + 10;
-        const paginatedPatients = patients.slice(startIndex, endIndex);
-        generate(paginatedPatients)
-      };
-      pagination.appendChild(pageButton);
-    }
+    generate(patients)
+
+    // for (let i = 1; i <= totalPages; i++) {
+    //   const pageButton = document.createElement('button');
+    //   pageButton.innerText = i.toString();
+    //   pageButton.className = `mx-1 px-3 py-1 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'} hover:bg-blue-400`;
+    //   pageButton.onclick = () => {
+    //     currentPage = i
+    //     const startIndex = (currentPage - 1) * 10;
+    //     const endIndex = startIndex + 10;
+    //     const paginatedPatients = patients.slice(startIndex, endIndex);
+    //     generate(paginatedPatients)
+    //   };
+    //   pagination.appendChild(pageButton);
+    // }
   }
 
   async function getPatients(start_date, limit, page) {
+    let records = []
     const requestOptions = {
       method: "GET",
       redirect: "follow"
@@ -151,11 +154,11 @@
               return response.json()
             })
             .then((result) => {
-              return result.data.records
+              records = result.data.records
             })
             .catch((error) => console.error(error));
 
-    return []
+    return records
   }
 
   function getToday() {
@@ -164,13 +167,12 @@
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
 
-    const formattedDate = `${yyyy}-${mm}-${dd}`;
-    return formattedDate
+    return `${yyyy}-${mm}-${dd}`;
   }
 
   window.addEventListener("load", async (event) => {
     // call api get patients today
-    let patients = await getPatients(getToday(), 10, 1)
+    let patients = await getPatients(getToday(), 1000, 1)
     localStorage.setItem("patients", JSON.stringify(patients))
     genPagination(patients)
   })
